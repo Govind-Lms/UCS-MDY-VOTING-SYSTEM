@@ -1,0 +1,27 @@
+[debug] [2022-07-01T05:31:37.037Z] ----------------------------------------------------------------------
+[debug] [2022-07-01T05:31:37.039Z] Command:       /usr/local/bin/firebase /Users/govindlamsal/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase deploy
+[debug] [2022-07-01T05:31:37.039Z] CLI Version:   9.16.0
+[debug] [2022-07-01T05:31:37.039Z] Platform:      darwin
+[debug] [2022-07-01T05:31:37.039Z] Node Version:  v12.18.1
+[debug] [2022-07-01T05:31:37.040Z] Time:          Fri Jul 01 2022 12:01:37 GMT+0630 (Myanmar Time)
+[debug] [2022-07-01T05:31:37.041Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-07-01T05:31:37.103Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-07-01T05:31:37.103Z] > authorizing via signed-in user (govinddev010@gmail.com)
+[debug] [2022-07-01T05:31:37.103Z] [iam] checking project voteapp-govind for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2022-07-01T05:31:37.107Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/voteapp-govind:testIamPermissions  
+ {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2022-07-01T05:31:37.127Z] [iam] error while checking permissions, command may fail: FirebaseError: Server Error. getaddrinfo ENOTFOUND cloudresourcemanager.googleapis.com
+[info] 
+[info] === Deploying to 'voteapp-govind'...
+[info] 
+[info] i  deploying storage, firestore 
+[debug] [2022-07-01T05:31:37.129Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/voteapp-govind  
+ 
+[info] 
+
+There was an issue deploying your functions. Verify that your project has a Google App Engine instance setup at https://console.cloud.google.com/appengine and try again. If this issue persists, please contact support.
+[debug] [2022-07-01T05:31:37.139Z] Error: getaddrinfo ENOTFOUND appengine.googleapis.com
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+[error] 
+[error] Error: Server Error. getaddrinfo ENOTFOUND appengine.googleapis.com
