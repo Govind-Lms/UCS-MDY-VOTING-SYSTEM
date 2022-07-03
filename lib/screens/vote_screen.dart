@@ -399,36 +399,52 @@ class _VoteScreenState extends State<VoteScreen> {
 
   
   showAlertBox(){
-    return showDialog(
-      barrierDismissible: false,
-
+    return showModalBottomSheet(
+      backgroundColor: UIColor.clayColor,
+      elevation: 1.0,
+      enableDrag: true,
+      isDismissible: true,
       builder: (context){
-        return Column(
-          children: [
-            Container(
-              margin: EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 20.0,),
-                  Text('Your Code is not Valid Anymore <3',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0,color: Colors.black,),),
-                  SizedBox(height: 10.0,),
-                  Row(
+        return Container(
+          
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0)
+            )
+          ),
+            margin: EdgeInsets.all(30.0),
+            height: MediaQuery.of(context).size.height/3,
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      RaisedButton(
-                        child: Text('Vote Someone Either'),
-                        onPressed: (){
-                          Navigator.of(context).pop(true);
-                        },
-                      ),
+
+                      Icon(Icons.favorite,size: 100.0,),
+                      SizedBox(height: 20.0,),
+                      Text('Your Code is not Valid Anymore <3',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0,color: Colors.black,),),
+                      SizedBox(height: 10.0,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RaisedButton(
+                            child: Text('Vote Someone Either'),
+                            onPressed: (){
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
-            )
-          ]
+                  ),
+                )
+              ]
+            ),
+          
         );
       },
       context: context,
@@ -438,6 +454,7 @@ class _VoteScreenState extends State<VoteScreen> {
 
   Dialog showCustomSuccessBox(){
     return Dialog(
+      
       shape: RoundedRectangleBorder(
         borderRadius:BorderRadius.circular(30.0)),
       child: Container(
