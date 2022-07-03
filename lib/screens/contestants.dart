@@ -122,33 +122,17 @@ class _ContestantsScreenState extends State<ContestantsScreen> {
                         child: ClayContainer(
                           borderRadius: 10.0,
                           color: UIColor.clayColor,
-                      
-                          child: Column(
-                            children: [
-                              Hero(
-                                tag: '${candidateLists[index].image}+image',
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: CachedNetworkImage(
-                                    width: cardWidth,
-                                    height: imageHeight,
-                                    imageUrl: '${candidateLists[index].image}',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 20.0,),
-                              Container(
-                                // color: Colors.grey.shade300,
+                          child: Hero(
+                            tag: '${candidateLists[index].image}+image',
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: CachedNetworkImage(
                                 width: cardWidth,
-                                height: MediaQuery.of(context).size.height * .17,
-                                child: CandidateTitle(
-                                  name: '${candidateLists[index].name}',
-                                  age: '${candidateLists[index].age}',
-                                  link: '${candidateLists[index].name}',
-                                ),
+                                height: imageHeight,
+                                imageUrl: '${candidateLists[index].image}',
+                                fit: BoxFit.cover,
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),

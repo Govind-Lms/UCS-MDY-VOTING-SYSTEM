@@ -2,9 +2,7 @@ import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vote_app/constants/style.dart';
-import 'package:vote_app/screens/CandidateList.dart';
 import 'package:vote_app/screens/contestants.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,6 +37,7 @@ class _HomePageState extends State<HomePage> {
             Candidate(name: 'Fresher Queens',image: 'assets/images/fresherQueen.png',),
           ],
         ),
+        SizedBox(height: 10.0,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

@@ -1,18 +1,7 @@
-
-// ignore_for_file: deprecated_member_use
-
-import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:material_dialogs/material_dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:vote_app/constants/style.dart';
-import 'package:vote_app/screens/CandidateList.dart';
-import 'package:vote_app/screens/homePage.dart';
 import 'package:vote_app/widgets/custom_appBar.dart';
 
 class VoteScreen extends StatefulWidget {
@@ -32,7 +21,6 @@ class VoteScreen extends StatefulWidget {
 class _VoteScreenState extends State<VoteScreen> {
 
   late String title = widget.title;
-
   late String kingOrQueen;
   late String fresherOrWhole;
   late String inputCode;
@@ -373,7 +361,6 @@ class _VoteScreenState extends State<VoteScreen> {
     }
   }
 
-  
   add()async{
     for(String voteCode in voteCodeLists){
       FirebaseFirestore.instance
@@ -397,64 +384,62 @@ class _VoteScreenState extends State<VoteScreen> {
     print(widget.year);
   }
 
-  
   showAlertBox(){
     return showModalBottomSheet(
+      context: context,
       backgroundColor: UIColor.clayColor,
       elevation: 1.0,
       enableDrag: true,
       isDismissible: true,
       builder: (context){
         return Container(
-          
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.0),
               topRight: Radius.circular(10.0)
             )
           ),
-            margin: EdgeInsets.all(30.0),
-            height: MediaQuery.of(context).size.height/3,
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+          margin: EdgeInsets.all(30.0),
+          height: MediaQuery.of(context).size.height/3,
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
 
-                      Icon(Icons.favorite,size: 100.0,),
-                      SizedBox(height: 20.0,),
-                      Text('Your Code is not Valid Anymore <3',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0,color: Colors.black,),),
-                      SizedBox(height: 10.0,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RaisedButton(
-                            child: Text('Vote Someone Either'),
-                            onPressed: (){
-                              Navigator.of(context).pop(true);
-                            },
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ]
-            ),
-          
+                    Icon(Icons.heart_broken,size: 100.0,color: Colors.red,),
+                    SizedBox(height: 20.0,),
+                    Text('Your Code is not Valid Anymore <3',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0,color: Colors.black,),),
+                    SizedBox(height: 10.0,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RaisedButton(
+                          color: UIColor.primaryColor,
+                          child: Text('Vote Someone Either',style: TextStyle(color: Colors.white),),
+                          onPressed: (){
+                            Navigator.of(context).pop(true);
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ]
+          ),
         );
       },
-      context: context,
       
     );
   }
 
-  Dialog showCustomSuccessBox(){
+  showCustomSuccessBox(){
     return Dialog(
-      
+
       shape: RoundedRectangleBorder(
         borderRadius:BorderRadius.circular(30.0)),
       child: Container(
@@ -475,7 +460,7 @@ class _VoteScreenState extends State<VoteScreen> {
     );
   }
   
-  void showSuccessBox(){
+  showSuccessBox(){
     return showAboutDialog(
       context: context,
       children: [
@@ -506,12 +491,8 @@ class _VoteScreenState extends State<VoteScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       backgroundColor: UIColor.clayColor,
       body: ListView(children: [
@@ -552,6 +533,99 @@ class _VoteScreenState extends State<VoteScreen> {
                     bottom: 0.0,
                     right: MediaQuery.of(context).size.width/2 -50,                    
                     child: GestureDetector(
+                      onTap: () async{
+                        FirebaseFirestore.instance
+                          .collection('votes')
+                          .doc(kingOrQueen)
+                          .collection(fresherOrWhole)
+                          .get().then((QuerySnapshot votes) {
+                            var demoCodes = votes;
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  actions: [
+                                  Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Enter Your Code'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
+                                        SizedBox(height: 10.0,),
+                                        Container(
+                                          height: 30.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            color: UIColor.clayColor
+                                          ),
+                                          margin: EdgeInsets.all(20.0),
+                                          child: Center(
+                                            child: TextFormField(
+                                              onChanged: ((code){
+                                                inputCode = code;
+                                              }),
+                                              keyboardType: TextInputType.number,
+                                              decoration: InputDecoration.collapsed(hintText: '  Eg: 12345678'),
+                                            ),
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            RaisedButton(
+                                              onPressed: (){
+
+                                                for( var code in demoCodes.docs ){
+                                                  if(inputCode != code.id){
+                                                    print("error code ="+inputCode);
+                                                    Navigator.of(context).pop(true);
+                                                    return showAlertBox();
+                                                  }
+                                                  else if( inputCode == code.id){
+                                                    
+                                                    FirebaseFirestore.instance
+                                                      .collection('candidates')
+                                                      .doc(kingOrQueen)
+                                                      .collection(fresherOrWhole)
+                                                      .doc(widget.no)
+                                                      .collection('votes')
+                                                      .doc(code.id).set({'code': code.id});
+                                                    FirebaseFirestore.instance
+                                                      .collection('votes')
+                                                      .doc(kingOrQueen)
+                                                      .collection(fresherOrWhole)
+                                                      .doc(code.id)
+                                                      .delete();
+                                                      Navigator.of(context).pop(true);
+                                                    return showSuccessBox();
+                                                  }
+                                                        
+                                                }
+                                                        
+                                            },
+                                              child: Text('Vote'),color: UIColor.primaryColor,
+                                            ),
+                                            
+                                            SizedBox(width: 10.0,),
+                                            RaisedButton(
+                                              onPressed: (){
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: Text('Cancel'),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),]  
+                                );
+                              },
+                            );
+                        });
+                      },
+                          
                       child: Container(
                         height: 70,
                         width: 70,
@@ -566,178 +640,7 @@ class _VoteScreenState extends State<VoteScreen> {
                             )
                           ]
                         ),
-                        child: IconButton(
-                          onPressed: () {
-                            FirebaseFirestore.instance
-                              .collection('votes')
-                              .doc(kingOrQueen)
-                              .collection(fresherOrWhole)
-                              .get().then((QuerySnapshot votes) {
-                                var demoCodes = votes;
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-
-                                  builder: (BuildContext context){
-                                    return AlertDialog(
-
-                                      actions: [
-                                      Container(
-                                        margin: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('Enter Your Code'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
-                                            SizedBox(height: 10.0,),
-                                            Container(
-                                              height: 30.0,
-                                              
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10.0),
-                                                color: UIColor.clayColor
-                                              ),
-                                              margin: EdgeInsets.all(20.0),
-                                              child: Center(
-                                                child: TextFormField(
-                                                  onChanged: ((code){
-                                                    inputCode = code;
-                                                  }),
-                                                  keyboardType: TextInputType.number,
-                                                  decoration: InputDecoration.collapsed(hintText: 'Eg: 12345678'),
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                RaisedButton(
-                                                  onPressed: ()async{
-
-                                                    for( var code in demoCodes.docs ){
-                                                      if(inputCode != code.id){
-                                                        print("error code ="+inputCode);
-                                                        Navigator.of(context).pop(true);
-                                                        return showAlertBox();
-                                                      }
-                                                      else if( inputCode == code.id){
-                                                        FirebaseFirestore.instance
-                                                          .collection('votes')
-                                                          .doc(kingOrQueen)
-                                                          .collection(fresherOrWhole)
-                                                          .doc(code.id)
-                                                          .delete();
-                                                          Navigator.of(context).pop(true);
-                                                        FirebaseFirestore.instance
-                                                          .collection('candidates')
-                                                          .doc(kingOrQueen)
-                                                          .collection(fresherOrWhole)
-                                                          .doc(widget.no)
-                                                          .collection('votes')
-                                                          .doc(code.id).set({'code': code.id});
-                                                        
-                                                        return showSuccessBox();
-                                                      }
-                                                            
-                                                    }
-                                                            
-                                                },
-                                                  child: Text('Vote'),color: UIColor.primaryColor,
-                                                ),
-                                                
-                                                SizedBox(width: 10.0,),
-                                                RaisedButton(
-                                                  onPressed: (){
-                                                    Navigator.of(context).pop(true);
-                                                  },
-                                                  child: Text('Cancel'),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),]  
-                                    );
-                                  },
-                                );
-                              //  Dialogs.materialDialog(
-                              //     msg: 'Vote Your Fav Contestants',
-                              //       lottieBuilder: Lottie.asset(
-                              //         'assets/cong_example.json',
-                              //         fit: BoxFit.contain,
-                              //       ),
-                              //     context: context,
-                              //     dialogWidth: kIsWeb ? 0.3 : null,
-
-                              //     actions: [
-                              //       Column(
-                              //         mainAxisAlignment: MainAxisAlignment.center,
-                              //         crossAxisAlignment: CrossAxisAlignment.center,
-                              //         children: [
-                              //           Text('Type Ur Code'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
-                              //         SizedBox(height: 10.0,),
-                              //         Container(
-                              //           margin: EdgeInsets.all(20.0),
-                              //           child: TextFormField(
-                              //             onChanged: ((code){
-                              //               inputCode = code;
-                              //             }),
-                              //             keyboardType: TextInputType.number,
-                              //             decoration: InputDecoration.collapsed(hintText: '12345678'),
-                              //           ),
-                              //         ),
-                              //         ],
-                              //       ),
-                              //       IconsOutlineButton(
-                              //         onPressed: ()async{          
-                              //           for( var code in demoCodes.docs ){
-                              //             if(inputCode != code.id){
-                              //               print("error code ="+inputCode);
-                              //               Navigator.of(context).pop(true);
-                              //               return showAlertBox();
-                              //             }
-                              //             else if( inputCode == code.id){
-                              //               FirebaseFirestore.instance
-                              //                 .collection('candidates')
-                              //                 .doc(kingOrQueen)
-                              //                 .collection(fresherOrWhole)
-                              //                 .doc(widget.no)
-                              //                 .collection('votes')
-                              //                 .doc(code.id).set({'code': code.id});
-                              //               FirebaseFirestore.instance
-                              //                 .collection('votes')
-                              //                 .doc(kingOrQueen)
-                              //                 .collection(fresherOrWhole)
-                              //                 .doc(code.id)
-                              //                 .delete();
-                              //                 Navigator.of(context).pop(true);
-                              //               return showSuccessBox();
-                              //             }
-                                                
-                              //           }
-                                                
-                              //       },
-                              //         text: 'Vote',
-                              //         iconData: Icons.cancel_outlined,
-                              //         textStyle: TextStyle(color: Colors.grey),
-                              //         iconColor: Colors.green,
-                              //       ),
-                              //       IconsButton(
-                              //         onPressed: () {},
-                              //         text: 'Cancel',
-                              //         iconData: Icons.delete,
-                              //         color: Colors.red,
-                              //         textStyle: TextStyle(color: Colors.white),
-                              //         iconColor: Colors.white,
-                              //       ),
-                              //     ],
-                              //  );
-                              });
-                            },
-                          
-                          color: UIColor.primaryColor,
-                          icon: Icon(Icons.favorite,size: 30.0),
-                        ),
+                        child:Icon(Icons.favorite,size: 30.0,color: UIColor.primaryColor,),
                             
                       ),
                     ),
