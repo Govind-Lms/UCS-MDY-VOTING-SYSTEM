@@ -383,49 +383,7 @@ class _VoteScreenState extends State<VoteScreen> {
         .doc(voteCode).set({'code ': voteCode});
     }
   }
-  Widget btn2(BuildContext context) {
-    return MaterialButton(
-      minWidth: 300,
-      color: Colors.grey[300],
-      onPressed: () => Dialogs.bottomMaterialDialog(
-          msg: 'Vote Your Fav Contestants',
-          title: 'Delete',
-          context: context,
-          actions: [
-            Text('Type Ur Code'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
-            SizedBox(height: 10.0,),
-            Container(
-              margin: EdgeInsets.all(20.0),
-              child: TextFormField(
-                onChanged: ((code){
-                  inputCode = code;
-                }),
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration.collapsed(hintText: '12345678'),
-              ),
-            ),
-            IconsOutlineButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              text: 'Vote',
-              iconData: Icons.cancel_outlined,
-              textStyle: TextStyle(color: Colors.grey),
-              iconColor: Colors.green,
-            ),
-            IconsButton(
-              onPressed: () {},
-              text: 'Cancel',
-              iconData: Icons.delete,
-              color: Colors.red,
-              textStyle: TextStyle(color: Colors.white),
-              iconColor: Colors.white,
-            ),
-          ]),
-      child: Text("Show Bottom Material Dialog"),
-    );
-  }
-
+ 
   @override
   void initState() {
     super.initState();
@@ -440,34 +398,41 @@ class _VoteScreenState extends State<VoteScreen> {
   }
 
   
-  void showAlertBox(){
-    return showAboutDialog(
-      context: context,
-      children: [
-        Container(
-          margin: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 20.0,),
-              Text('You Have Already Voted this Section.',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0,color: Colors.black,),),
-              SizedBox(height: 10.0,),
-              Row(
+  showAlertBox(){
+    return showDialog(
+      barrierDismissible: false,
+
+      builder: (context){
+        return Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RaisedButton(
-                    child: Text('Vote Someone Either'),
-                    onPressed: (){
-                      Navigator.of(context).pop(true);
-                    },
-                  ),
+                  SizedBox(height: 20.0,),
+                  Text('Your Code is not Valid Anymore <3',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0,color: Colors.black,),),
+                  SizedBox(height: 10.0,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RaisedButton(
+                        child: Text('Vote Someone Either'),
+                        onPressed: (){
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
-        )
-      ]
+              ),
+            )
+          ]
+        );
+      },
+      context: context,
+      
     );
   }
 
@@ -585,7 +550,7 @@ class _VoteScreenState extends State<VoteScreen> {
                           ]
                         ),
                         child: IconButton(
-                          onPressed: () async{
+                          onPressed: () {
                             FirebaseFirestore.instance
                               .collection('votes')
                               .doc(kingOrQueen)
@@ -606,16 +571,24 @@ class _VoteScreenState extends State<VoteScreen> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('Type Ur Code'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
+                                            Text('Enter Your Code'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),),
                                             SizedBox(height: 10.0,),
                                             Container(
+                                              height: 30.0,
+                                              
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10.0),
+                                                color: UIColor.clayColor
+                                              ),
                                               margin: EdgeInsets.all(20.0),
-                                              child: TextFormField(
-                                                onChanged: ((code){
-                                                  inputCode = code;
-                                                }),
-                                                keyboardType: TextInputType.number,
-                                                decoration: InputDecoration.collapsed(hintText: '12345678'),
+                                              child: Center(
+                                                child: TextFormField(
+                                                  onChanged: ((code){
+                                                    inputCode = code;
+                                                  }),
+                                                  keyboardType: TextInputType.number,
+                                                  decoration: InputDecoration.collapsed(hintText: 'Eg: 12345678'),
+                                                ),
                                               ),
                                             ),
                                             Row(
@@ -623,7 +596,7 @@ class _VoteScreenState extends State<VoteScreen> {
                                               children: [
                                                 RaisedButton(
                                                   onPressed: ()async{
-                                                              
+
                                                     for( var code in demoCodes.docs ){
                                                       if(inputCode != code.id){
                                                         print("error code ="+inputCode);
@@ -632,19 +605,20 @@ class _VoteScreenState extends State<VoteScreen> {
                                                       }
                                                       else if( inputCode == code.id){
                                                         FirebaseFirestore.instance
-                                                          .collection('candidates')
-                                                          .doc(kingOrQueen)
-                                                          .collection(fresherOrWhole)
-                                                          .doc(widget.no)
-                                                          .collection('votes')
-                                                          .doc(code.id).set({'code': code.id});
-                                                        FirebaseFirestore.instance
                                                           .collection('votes')
                                                           .doc(kingOrQueen)
                                                           .collection(fresherOrWhole)
                                                           .doc(code.id)
                                                           .delete();
                                                           Navigator.of(context).pop(true);
+                                                        FirebaseFirestore.instance
+                                                          .collection('candidates')
+                                                          .doc(kingOrQueen)
+                                                          .collection(fresherOrWhole)
+                                                          .doc(widget.no)
+                                                          .collection('votes')
+                                                          .doc(code.id).set({'code': code.id});
+                                                        
                                                         return showSuccessBox();
                                                       }
                                                             
