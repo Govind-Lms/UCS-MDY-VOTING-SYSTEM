@@ -375,7 +375,7 @@ class _VoteScreenState extends State<VoteScreen> {
   void initState() {
     super.initState();
     check();
-    add();
+    // add();
     print(fresherOrWhole);
     print(kingOrQueen);
     print(title);
@@ -584,7 +584,6 @@ class _VoteScreenState extends State<VoteScreen> {
                                                     return showAlertBox();
                                                   }
                                                   else if( inputCode == code.id){
-                                                    
                                                     FirebaseFirestore.instance
                                                       .collection('candidates')
                                                       .doc(kingOrQueen)
@@ -600,6 +599,10 @@ class _VoteScreenState extends State<VoteScreen> {
                                                       .delete();
                                                       Navigator.of(context).pop(true);
                                                     return showSuccessBox();
+                                                  }
+                                                  else if(demoCodes.docs.isEmpty){
+                                                    Navigator.of(context).pop(true);
+                                                    return showAlertBox();
                                                   }
                                                         
                                                 }
