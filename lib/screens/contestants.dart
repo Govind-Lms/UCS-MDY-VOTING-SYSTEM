@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vote_app/constants/style.dart';
 import 'package:vote_app/screens/vote_screen.dart';
 import '../models/candidate_model.dart';
 import '../widgets/custom_appBar.dart';
-import 'CandidateList.dart';
 class ContestantsScreen extends StatefulWidget {
   final String title;
   final String image;
@@ -17,11 +15,29 @@ class ContestantsScreen extends StatefulWidget {
 }
 
 class _ContestantsScreenState extends State<ContestantsScreen> {
+
   late PageController _titlePageController;
   late List<CandidateModel> candidateLists;
   late int index = 0;
 
 
+  List<String> wholeKingImagesList =[
+    'assets/images/wholekings/1.png',
+    'assets/images/wholekings/2.png',
+    'assets/images/wholekings/3.png',
+    'assets/images/wholekings/4.png',
+    'assets/images/wholekings/5.png',
+    'assets/images/wholekings/6.png',
+  ];
+
+  getImageLists(){
+    switch(widget.title){
+      case 'Whole Kings':return wholeKingImagesList;
+      case 'Fresher Queens':return qfQueens;
+      case 'Whole Kings' :return qwKings;
+      case 'Whole Queens' :return qwQueens;
+    }
+  }
 
   Stream fKings= FirebaseFirestore.instance.collection('candidates').doc('Kings').collection('Fresher').snapshots();
   Stream fQueens= FirebaseFirestore.instance.collection('candidates').doc('Queens').collection('Fresher').snapshots();
@@ -38,7 +54,6 @@ class _ContestantsScreenState extends State<ContestantsScreen> {
     _titlePageController = PageController();
     fetchAllUsers().then((List<CandidateModel>list) {
       candidateLists = list;
-      // return candidateLists;
       setState(() {
         candidateLists = list;
       });
@@ -85,18 +100,15 @@ class _ContestantsScreenState extends State<ContestantsScreen> {
   
   @override
   Widget build(BuildContext context) {
-
     double cardWidth= MediaQuery.of(context).size.width;
     double imageHeight= MediaQuery.of(context).size.height * .5;
     return Scaffold(
       body: StreamBuilder<QuerySnapshot<Object>>(
         stream: getData(),
         builder: (context, snapshot) {
-          
           if(snapshot.hasError || snapshot.connectionState == ConnectionState.waiting){
             return Center(child: CircularProgressIndicator(color: UIColor.primaryColor,));
           }
-          
           if(snapshot.hasData){
             return  Column(
               children: [
@@ -117,24 +129,33 @@ class _ContestantsScreenState extends State<ContestantsScreen> {
                           ))
                         );
                       },
-                      child: Container(
-                        margin: EdgeInsets.all(20.0),
-                        child: ClayContainer(
-                          borderRadius: 10.0,
-                          color: UIColor.clayColor,
-                          child: Hero(
-                            tag: '${candidateLists[index].image}+image',
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: CachedNetworkImage(
-                                width: cardWidth,
-                                height: imageHeight,
-                                imageUrl: '${candidateLists[index].image}',
-                                fit: BoxFit.cover,
+                      child: Column(
+
+                        children: [
+
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 1.0),
+                              borderRadius: BorderRadius.circular(10.0)
+                            ),
+                            margin: EdgeInsets.all(20.0),
+                            child: Hero(
+                              tag: '${candidateLists[index].image}+image',
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: CachedNetworkImage(
+                                  width: cardWidth,
+                                  height: imageHeight,
+                                  imageUrl: '${candidateLists[index].image}',
+                                  fit: BoxFit.cover,
+                                ),
+                                // child: Image(image: AssetImage()),
                               ),
                             ),
                           ),
-                        ),
+
+                          Text('${candidateLists[index].no}',style: TextStyle(fontSize:16.0, fontWeight: FontWeight.bold),)
+                        ],
                       ),
                     );
                   },
@@ -143,9 +164,7 @@ class _ContestantsScreenState extends State<ContestantsScreen> {
             );
           }
           else{
-            return Container(
-              child: Center(child: Text('loading')),
-            );
+            return Center(child: Text('loading'));
           }
         },
         

@@ -1,6 +1,5 @@
 import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vote_app/constants/style.dart';
 import 'package:vote_app/screens/contestants.dart';
@@ -11,6 +10,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

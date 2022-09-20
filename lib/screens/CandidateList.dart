@@ -43,7 +43,6 @@ class _CandidateScreenState extends State<CandidateScreen> {
     _titlePageController = PageController();
     fetchAllUsers().then((List<CandidateModel>list) {
       candidateLists = list;
-      // return candidateLists;
       setState(() {
         candidateLists = list;
       });
